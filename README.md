@@ -66,9 +66,9 @@ flowchart LR
     W -->|calls| DS
     DS -->|calls| PS
     
-    classDef foundation fill:#1a1a1a,stroke:#888,color:#fff,stroke-width:2px
-    classDef pure fill:#1a1a2e,stroke:#4ecca3,color:#fff,stroke-width:2px
-    classDef effects fill:#2e1a1a,stroke:#ec4e4e,color:#fff,stroke-width:2px
+    classDef foundation fill:#2d3748,stroke:#a0aec0,color:#fff,stroke-width:2px
+    classDef pure fill:#2c5282,stroke:#90cdf4,color:#fff,stroke-width:2px
+    classDef effects fill:#744210,stroke:#ecc94b,color:#fff,stroke-width:2px
     
     class DT1 foundation
     class C,P,W pure
