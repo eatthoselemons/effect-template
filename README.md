@@ -42,7 +42,7 @@ This project uses `Effect` for its improvement of the standard library, function
 ### Architecture Layers
 
 ```mermaid
-%%{init: {'theme':'base', 'themeVariables': {'primaryColor':'#1a1a2e','primaryTextColor':'#fff','primaryBorderColor':'#4ecca3','lineColor':'#666','secondaryColor':'#2e1a1a','tertiaryColor':'#1a1a1a'}}}%%
+%%{init: {'theme':'base', 'themeVariables': {'primaryColor':'#f7fafc','primaryTextColor':'#2d3748','primaryBorderColor':'#cbd5e0','lineColor':'#a0aec0','secondaryColor':'#f7fafc','tertiaryColor':'#f7fafc'}}}%%
 flowchart LR
     subgraph DT[" FOUNDATION - Domain Types "]
         DT1[Email, Money, Cart<br/>Branded Types]
