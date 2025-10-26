@@ -1,9 +1,22 @@
 # effect-template
-This is a template for making Effect applications, with documentation meant for LLM consumption and development guidance
+A template repository for LLM-driven development of Effect applications, with comprehensive documentation, rules, and checklists designed for AI consumption.
 
-## Getting Started
+## What Is This?
 
-### Quick Start
+This is **not** a traditional application template. Instead, it's a meta-template designed to accelerate LLM-assisted development by providing:
+
+1. **Centralized Rules & Patterns**: A single source of truth for architectural patterns, coding conventions, and best practices for Effect-based TypeScript applications
+2. **LLM-Optimized Documentation**: Structured documentation that serves as context for AI assistants to scaffold new projects correctly
+3. **Automated Code Review**: Checklists that enable LLMs to self-review their output before human review, catching common issues automatically
+4. **Reusable Foundation**: Fork this repository to quickly start new projects with pre-configured architectural guidance
+
+## How to Use
+
+1. **Fork this repository** when starting a new Effect project
+2. **Provide relevant documentation** from `docs/` as context to your LLM
+3. **Ask the LLM to scaffold** your application following the documented patterns
+4. **Use checklists** (in `docs/framework/effect/checklists/`) to have the LLM review its own code
+5. **Review the LLM's work** knowing common issues have already been addressed
 
 ## Design Overview
 ### Books
