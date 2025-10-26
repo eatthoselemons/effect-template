@@ -42,38 +42,37 @@ This project uses `Effect` for its improvement of the standard library, function
 ### Architecture Layers
 
 ```mermaid
-graph TB
-    subgraph "Business Logic (Pure)"
-        W[Workflows<br/>Orchestration]
-        C[Checks<br/>Simple Predicates]
-        P[Policies<br/>Business Rules]
+%%{init: {'theme':'base', 'themeVariables': {'primaryColor':'#1a1a2e','primaryTextColor':'#fff','primaryBorderColor':'#4ecca3','lineColor':'#666','secondaryColor':'#2e1a1a','tertiaryColor':'#1a1a1a'}}}%%
+flowchart LR
+    subgraph DT[" FOUNDATION - Domain Types "]
+        DT1[Email, Money, Cart<br/>Branded Types]
     end
     
-    subgraph "System (Effects)"
-        DL[Domain Services<br/>Abstractions]
-        PL[Platform Services<br/>External Systems]
+    subgraph BL[" PURE BUSINESS LOGIC "]
+        C[Checks<br/>isValidCart, hasRole]
+        P[Policies<br/>canPurchase, canAccess]
+        W[Workflows<br/>completePurchase, createContent]
     end
     
-    subgraph "Foundation"
-        DT[Domain Types<br/>Data Models]
+    subgraph SYS[" SIDE EFFECTS "]
+        DS[Domain Services<br/>PersistenceService]
+        PS[Platform Services<br/>Neo4jService, FileSystem]
     end
     
-    W --> C
-    W --> P
-    W --> DL
-    DL --> PL
-    C --> DT
-    P --> DT
-    P --> C
-    DL --> DT
+    DT1 -.->|used by| C
+    DT1 -.->|used by| P
+    C -->|used by| P
+    P -->|used by| W
+    W -->|calls| DS
+    DS -->|calls| PS
     
-    classDef pure fill:#1a1a2e,stroke:#4ecca3,color:#fff
-    classDef effects fill:#2e1a1a,stroke:#ec4e4e,color:#fff
-    classDef data fill:#1a1a1a,stroke:#888,color:#fff
+    classDef foundation fill:#1a1a1a,stroke:#888,color:#fff,stroke-width:2px
+    classDef pure fill:#1a1a2e,stroke:#4ecca3,color:#fff,stroke-width:2px
+    classDef effects fill:#2e1a1a,stroke:#ec4e4e,color:#fff,stroke-width:2px
     
-    class W,C,P pure
-    class DL,PL effects
-    class DT data
+    class DT1 foundation
+    class C,P,W pure
+    class DS,PS effects
 ```
 
 **Layer Descriptions:**
