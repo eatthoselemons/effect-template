@@ -1,5 +1,5 @@
 # effect-template
-A template repository for LLM-driven development of Effect applications, with comprehensive documentation, rules, and checklists designed for AI consumption.
+A template repository for LLM-driven development of Effect applications following **workflow-centric functional domain-driven design**, with comprehensive documentation, rules, and checklists designed for AI consumption.
 
 ## What Is This?
 
@@ -19,6 +19,11 @@ This is **not** a traditional application template. Instead, it's a meta-templat
 5. **Review the LLM's work** knowing common issues have already been addressed
 
 ## Design Overview
+
+This template promotes **workflow-centric functional domain-driven design** - an architectural approach where workflows orchestrate pure business logic through composable layers, combining the pipeline patterns from functional programming with domain-driven design principles.
+
+The architecture follows an "onion" pattern: **pure functions at the center, data validation and I/O at the edges**. Your core business logic remains pure and testable, while side effects are pushed to the outer layers where they can be managed through Effect's service system.
+
 ### Books
 This is a project template that is based on Scott Wlaschin's [*Domain Modeling Made Functional*](https://pragprog.com/titles/swdddf/domain-modeling-made-functional/). It also uses some of the ideas from Eric Normand's [*Grokking Simplicity*](https://www.manning.com/books/grokking-simplicity).
 
