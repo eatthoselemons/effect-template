@@ -22,8 +22,13 @@ docs/
 │       │   └── level-2/
 │       └── checklists/
 │           └── <split into 20 item chunks>
-└── project-details/
-    └── rule-examples.md
+├── project-structure/
+│   ├── overview.md
+│   ├── directory-layout.md
+│   └── conventions.md
+└── template-details/
+    ├── rule-examples.md
+    └── considerations.md
 ```
 
-For detailed examples of each rule level, see [docs/project-details/rule-examples.md](docs/project-details/rule-examples.md).
+For detailed examples of each rule level, see [docs/template-details/rule-examples.md](docs/template-details/rule-examples.md).
