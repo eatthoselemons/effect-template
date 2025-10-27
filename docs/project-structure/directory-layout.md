@@ -4,6 +4,7 @@
 src/
 ├── domain/                   # DATA
 │   ├── types/                # Schemas, branded types, errors
+│   ├── ops/                  # Type Specific Functions (centsToDollars())
 │   └── models/               # Domain models (Money, Cart, etc.)
 │
 ├── checks/                    # CHECKS - Small, context-light predicates

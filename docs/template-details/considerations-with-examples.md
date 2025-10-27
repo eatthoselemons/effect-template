@@ -38,7 +38,7 @@
    ❌ `const validateUser = (user: User) => { /* 50 lines checking everything */ }`
    ✅ `const hasRole = (user: User, role: Role): boolean => user.roles.includes(role)`
 
-9. **Policy: A business decision rule. It composes checks, considers context.**
+9. **Policy: A business decision rule. It composes checks, considers context. Returns Expressive Types**
     ❌ `const canAccess = (user: User): boolean => user.active`
     ✅ `const canAccess = (user: User, resource: Resource, time: Date): Decision => hasRole(user, "admin") && isBusinessHours(time) ? Allow : Deny`
 
@@ -62,7 +62,7 @@
     ❌ `const checkout = () => Effect.gen(function*() { yield* charge(); yield* reserve(); yield* ship() })`
     ✅ `const checkout = () => Effect.gen(function*() { yield* reserve(); yield* charge(); yield* ship() })`
 
-14. **Do not encode vendor-specific logic or business policy here, that goes in platform/domain services**
+14. **Do not encode vendor-specific logic here, that goes in platform/domain services**
     ❌ `const processPayment = () => stripe.charges.create({ amount: 1000, currency: "usd" })`
     ✅ `const processPayment = () => Effect.gen(function*() { const payment = yield* PaymentService; yield* payment.charge(...) })`
 
@@ -73,8 +73,8 @@
     ✅ `const createOrder = (orderId: OrderId, cart: Cart) => Database.upsert({ id: orderId, ... })`
 
 16. **Order effects safely; irreversible effects last**
-    ❌ `const checkout = () => Effect.gen(function*() { yield* sendConfirmationEmail(); yield* chargeCard() })`
-    ✅ `const checkout = () => Effect.gen(function*() { yield* chargeCard(); yield* sendConfirmationEmail() })`
+    ❌ `const checkout = () => Effect.gen(function*() { yield* sendConfirmationEmail(); yield* getShippingInformation() })`
+    ✅ `const checkout = () => Effect.gen(function*() { yield* getShippingInformation(); yield* sendConfirmationEmail() })`
 
 ## Error handling and return shapes
 
@@ -121,7 +121,7 @@
     ✅ `const processOrder = () => Effect.gen(function*() { yield* EventStore.append("OrderCreated", ...); /* do work */ })`
 
 26. **Make service calls idempotent and retryable.**
-    ❌ `const sendEmail = (to: Email) => EmailService.send(to, ...)`
+    ❌ `const sendEmail = (to: Email) => EmailService.send(to, generateMessage())`
     ✅ `const sendEmail = (messageId: MessageId, to: Email) => EmailService.send({ messageId, to, ... })`
 
 ## Testing strategy
