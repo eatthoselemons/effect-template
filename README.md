@@ -39,6 +39,17 @@ Wlaschin describes similar things in his book. He talks about the idea of an "on
 ### TypeScript's Effect
 This project uses `Effect` for its improvement of the standard library, functional features, `ZIO` type system, and relies heavily on the `services`/`layers` components. Because the services and layers provide such an easy way to separate your application into composable pieces the project is laid out in the onion fashion Normand and Wlaschin talk about.
 
+### Architecture Reasoning
+#### Layers
+This architecture is designed to take advantage of the layer system provided by effect and give some guidelines that allow room for abstraction as well as swapable layers for testing, and different backends.
+
+The decision to go with "policies" and "checks" has unknown effects at this time. The reason for breaking that out was since there seemed to be two categories of decisions inside of workflows. There were the things that really had no reason to return anything other than a boolean. There were those that needed complex decisions and return values and those seemed like they should be separate in the code.
+
+The platform layer and domain layer are designed such that it ensures easy abstractions to allow you to change the storage backend from neo4j to a filesystem with ease
+
+#### Future
+There might be a need to split the workflows into two layers: `workflows` and `orchestration` because the workflows might get hard to read if they are both doing the checks and gathering all the information for the policies
+
 ### Architecture Layers
 
 ```mermaid
