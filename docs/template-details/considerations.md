@@ -47,17 +47,18 @@ Temporal-like workflows without Temporal
 26. Make service calls idempotent and retryable.
 
 Testing strategy
-27. Values/ops: property tests and unit tests.
+27. Values/ops: unit tests
 28. checks: unit tests
-29. policies: scenario-based tests
+29. policies: scenario-based tests with test layers
 30. Workflows: test with test layers for services (Effect Test/Layer).
-31. services: integration tests against sandboxes/containers; contract tests for mapping.
+31. Domain services: test with test layers
+32. Platform services: integration tests against sandboxes/containers
 
 Anti-patterns to avoid
-32. Booleans from policies without context (checks can be booleans if answer is yes/no, some checks will result in list of options)
-33. Putting checks/policies in platform or domain services
-34. Centralizing every if into one "god decisions" module
+33. Booleans from policies without context (checks can be booleans if answer is yes/no, some checks will result in list of options)
+34. Putting checks/policies in platform or domain services
+35. Centralizing every if into one "god decisions" module
 
 Adoption tips
-35. Start with Schema.struct + ops modules
-36. With the number of explicit types code should be fairly self documenting
+36. Start with Schema.struct + ops modules
+37. With the number of explicit types code should be fairly self documenting

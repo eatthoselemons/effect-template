@@ -126,46 +126,50 @@
 
 ## Testing strategy
 
-27. **Values/ops: property tests and unit tests.**
-    ❌ `test("adds money", () => expect(MoneyOps.add(USD(5), USD(3))).toBe(8))`
-    ✅ `fc.assert(fc.property(fc.integer(), fc.integer(), (a, b) => MoneyOps.add(USD(a), USD(b)) === USD(a + b)))`
+27. **Values/ops: unit tests**
+    ✅ `test("adds money", () => expect(MoneyOps.add(USD(5), USD(3))).toBe(USD(8)))`
+    ✅ `test("multiplies money", () => expect(MoneyOps.multiply(USD(10), 2)).toBe(USD(20)))`
 
 28. **checks: unit tests**
-    ❌ `test("hasRole works", () => { /* integration test with database */ })`
     ✅ `test("hasRole returns true when user has role", () => expect(hasRole(user, "admin")).toBe(true))`
+    ✅ `test("isActive returns false for suspended user", () => expect(isActive(suspendedUser)).toBe(false))`
 
-29. **policies: scenario-based tests**
+29. **policies: scenario-based tests with test layers**
     ❌ `test("canPurchase", () => expect(canPurchase(user)).toBe(true))`
-    ✅ `test("canPurchase allows admin during business hours", () => expect(canPurchase(adminUser, item, businessHour)).toEqual(Allow))`
+    ✅ `test("canPurchase allows admin during business hours", () => Effect.runPromise(canPurchase(adminUser, item, businessHour).pipe(Effect.provide(TestInventoryLayer))))`
 
 30. **Workflows: test with test layers for services (Effect Test/Layer).**
     ❌ `test("checkout", async () => { /* uses real Stripe */ })`
     ✅ `test("checkout", () => Effect.runPromise(checkout().pipe(Effect.provide(TestPaymentLayer))))`
 
-31. **services: integration tests against sandboxes/containers; contract tests for mapping.**
-    ❌ `test("payment service", () => { /* mocked */ })`
-    ✅ `test("payment service", () => { /* uses testcontainers or sandbox API */ })`
+31. **Domain services: test with test layers**
+    ❌ `test("PersistenceService", () => { /* uses mocks */ })`
+    ✅ `test("PersistenceService.findById", () => Effect.runPromise(PersistenceService.findById(id).pipe(Effect.provide(TestDatabaseLayer))))`
+
+32. **Platform services: integration tests against sandboxes/containers**
+    ❌ `test("Neo4jService", () => { /* mocked */ })`
+    ✅ `test("Neo4jService.query", async () => { /* uses testcontainers with real Neo4j */ })`
 
 ## Anti-patterns to avoid
 
-32. **Booleans from policies without context (checks can be booleans if answer is yes/no, some checks will result in list of options)**
+33. **Booleans from policies without context (checks can be booleans if answer is yes/no, some checks will result in list of options)**
     ❌ `const canAccess = (user: User): boolean => ...`
     ✅ `const canAccess = (user: User, resource: Resource): AccessDecision => ({ allowed: true, reason: "admin" })`
 
-33. **Putting checks/policies in platform or domain services**
+34. **Putting checks/policies in platform or domain services**
     ❌ `services/domain/UserService.ts: canPurchase(user: User) => ...`
     ✅ `policies/purchase-rules.ts: canPurchase(user: User, cart: Cart) => ...`
 
-34. **Centralizing every if into one "god decisions" module**
+35. **Centralizing every if into one "god decisions" module**
     ❌ `decisions/all-decisions.ts: canPurchase(), canAccess(), canDelete(), ...`
     ✅ `policies/purchase-rules.ts: canPurchase(); policies/access.ts: canAccess()`
 
 ## Adoption tips
 
-35. **Start with Schema.struct + ops modules**
+36. **Start with Schema.struct + ops modules**
     ❌ `type Money = number; const add = (a: number, b: number) => a + b`
     ✅ `const Money = Schema.Struct({ amount: Schema.Number, currency: Schema.Literal("USD") }); const MoneyOps = { add: ... }`
 
-36. **With the number of explicit types code should be fairly self documenting**
+37. **With the number of explicit types code should be fairly self documenting**
     ❌ `const process = (data: any): any => ...`
     ✅ `const processOrder = (order: ValidatedOrder): Effect.Effect<ProcessedOrder, ProcessingError> => ...`
