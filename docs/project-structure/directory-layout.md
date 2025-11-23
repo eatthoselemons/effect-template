@@ -5,7 +5,7 @@ src/
 ├── domain/                   # PURE DOMAIN KNOWLEDGE
 │   ├── models/               # Data Types + Pure Logic
 │   │   ├── Money.ts          # Schema + pure functions (add, format)
-│   │   └── Cart.ts           # Schema + checks (isEmpty, total)
+│   │   └── Cart.ts           # Schema + Pure Ops (isEmpty, total)
 │   │   
 │   └── interfaces/           # Service Contracts (Ports)
 │       ├── PaymentRepo.ts    # interface PaymentRepo { ... }
