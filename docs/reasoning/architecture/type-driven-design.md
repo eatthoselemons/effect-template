@@ -47,3 +47,14 @@ If a User cannot have a "PaidDate" unless they have a "PaidStatus", do not make 
 Functions in the `domain/` layer should generally assume their inputs are valid.
 - `calculateTotal(cart: Cart)`: Assumes `Cart` is a valid structure.
 - Validation happens at the *edges* (in the Workflow or Input Adapters), converting `RawJson` -> `Cart`.
+
+### 5. Pipeline States (Intermediate Types)
+In Workflows, use specific types to represent the progress of a process. This ensures that steps cannot be executed out of order. You cannot "Ship" an order that hasn't been "Paid" because the `ship()` function demands a `PaidOrder` type, which is only created by the `pay()` function.
+
+- **Pattern**:
+  ```typescript
+  validateOrder(order: UnvalidatedOrder): ValidatedOrder // ensures address exists
+  priceOrder(order: ValidatedOrder): PricedOrder         // calculates taxes/totals
+  makePayment(order: PricedOrder): PaidOrder             // confirms transaction
+  shipOrder(order: PaidOrder): ShippingConfirmation
+  ```
