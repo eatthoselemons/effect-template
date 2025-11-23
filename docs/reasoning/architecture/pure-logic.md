@@ -12,16 +12,12 @@ We separate them:
 - **Policy**: `canAccess(user)` -> Pure function. Returns Result.
 - **Workflow**: `fetchUser()` -> `canAccess(user)` -> `return`.
 
-### 2. Checks vs Policies
-We originally considered a "Checks" layer but merged it into "Domain Models" and "Policies" to avoid bloat.
+### 2. Policies
+We considered a separate "Checks" layer but found it redundant. Logic now lives in two places:
+1.  **Domain Models**: Pure logic about *one* entity (e.g., `Cart.isEmpty`).
+2.  **Policies**: Pure logic about *decisions* or *multiple* entities (e.g., `canCheckout(user, cart)`).
 
-- **Domain Model Functions**: "Is this data valid?" (Internal Consistency).
-  - `Cart.isEmpty(cart)`
-  - Co-located with the Type definition.
-  
-- **Policies**: "Is this action allowed?" (Business Rules).
-  - `PurchasePolicy.canCheckout(user, cart)`
-  - Context-aware (Time, Permissions, Balance).
+This binary separation forces clear ownership.
 
 ### 3. Determinism
 By keeping Policies pure, we ensure that for any given input, the business decision is always the same. This makes debugging trivial—you just replay the inputs.

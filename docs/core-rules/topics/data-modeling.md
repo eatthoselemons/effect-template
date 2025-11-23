@@ -1,29 +1,16 @@
-# Data Modeling & Schema
+# Data Modeling & Schema Rules
 
-## Rules
+1. **Use Schema.Struct (Not Classes)**: Define data as plain objects with `Schema.Struct` for serializability. Logic goes in separate `Ops` modules.
+   `const Cart = Schema.Struct({ items: Schema.Array(Item) })`
 
-1. **[Schema-Structs] Prefer Schema.struct (plain objects) over Classes**
-   - Data should be dumb. Logic lives in exported functions ("Ops").
-   - **Why**: Serializable, composable, works with `Effect` ecosystem.
+2. **Branded Primitives**: Always brand IDs and units (Money, Email) to prevent type collisions.
+   `type USD = number & Brand.Brand<"USD">; const price = Brand.nominally(Schema.Number, "USD")(19.99)`
 
-   ❌ `class Cart { constructor(public items: Item[]) {} }`
-   ✅ `const Cart = Schema.Struct({ items: Schema.Array(Item) })`
+3. **Schema Validation**: Enforce invariants (regex, range) via `pipe(Schema.filter/pattern)`.
+   `const Email = Schema.String.pipe(Schema.pattern(/^@/), Schema.brand("Email"))`
 
-2. **[Branded-Primitives] Use branded primitives for units**
-   - Never use raw `number` or `string` for domain concepts like ID, Money, Email.
-   - **Why**: Prevents accidental passing of "UserId" to "OrderId" function.
+4. **Immutability**: Never mutate state. Return new copies using spread syntax.
+   `const add = (c: Cart, i: Item): Cart => ({ ...c, items: [...c.items, i] })`
 
-   ❌ `const price: number = 19.99`
-   ✅ `type USD = number & Brand.Brand<"USD">; const price = Brand.nominally(Schema.Number, "USD")(19.99)`
-
-3. **[Schema-Validation] Validate on Refinement**
-   - Use `Schema.filter` or `pattern` to enforce invariants at the type level.
-
-   ❌ `const EmailSchema = Schema.String`
-   ✅ `const EmailSchema = Schema.String.pipe(Schema.pattern(/^[^@]+@[^@]+$/), Schema.brand("Email"))`
-
-4. **[Immutable-Data] Return new values**
-   - **Why**: Predictability in async contexts.
-
-   ❌ `const addItem = (cart: Cart, item: Item) => { cart.items.push(item); return cart }`
-   ✅ `const addItem = (cart: Cart, item: Item): Cart => ({ ...cart, items: [...cart.items, item] })`
+5. **Rich Types**: Encode state in types (e.g., `PendingOrder` vs `PaidOrder`) rather than using optional flags.
+   `type Order = PendingOrder | PaidOrder` (Discriminated Union)
