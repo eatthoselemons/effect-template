@@ -55,50 +55,60 @@ There might be a need to split the workflows into two layers: `workflows` and `o
 ```mermaid
 %%{init: {'theme':'base', 'themeVariables': {'primaryColor':'#f7fafc','primaryTextColor':'#2d3748','primaryBorderColor':'#4a5568','lineColor':'#a0aec0','secondaryColor':'#f7fafc','tertiaryColor':'#f7fafc'}}}%%
 flowchart LR
-    subgraph DT[" FOUNDATION - Domain Types "]
-        DT1[Email, Money, Cart<br/>Branded Types]
+    subgraph DOM[" DOMAIN (Pure) "]
+        M[Models<br/>Schema + Pure Funcs]
+        I[Interfaces<br/>Service Contracts]
     end
     
-    subgraph BL[" PURE BUSINESS LOGIC "]
-        C[Checks<br/>isValidCart, hasRole]
-        P[Policies<br/>canPurchase, canAccess]
-        W[Workflows<br/>completePurchase, createContent]
+    subgraph LOGIC[" LOGIC (Pure) "]
+        P[Policies<br/>Decisions & Rules]
+    end
+
+    subgraph ORCH[" ORCHESTRATION (Impure) "]
+        W[Workflows<br/>Transaction Scripts]
+        R[Registries<br/>Strategy Selection]
     end
     
-    subgraph SYS[" SIDE EFFECTS "]
-        DS[Domain Services<br/>PersistenceService]
-        PS[Platform Services<br/>Neo4jService, FileSystem]
+    subgraph SYS[" INFRASTRUCTURE (Impure) "]
+        S[Services<br/>Platform Adapters]
+        L[Lib<br/>Generic Tools]
     end
     
-    DT1 -.->|used by| C
-    DT1 -.->|used by| P
-    C -->|used by| P
+    M -.->|used by| P
+    M -.->|used by| W
     P -->|used by| W
-    W -->|calls| DS
-    DS -->|calls| PS
+    W -->|calls| I
+    R -->|wires| I
+    S -.->|implements| I
+    S -->|uses| L
     
-    classDef foundation fill:#2d3748,stroke:#a0aec0,color:#fff,stroke-width:2px
-    classDef pure fill:#2c5282,stroke:#90cdf4,color:#fff,stroke-width:2px
-    classDef effects fill:#744210,stroke:#ecc94b,color:#fff,stroke-width:2px
+    classDef domain fill:#2d3748,stroke:#a0aec0,color:#fff,stroke-width:2px
+    classDef logic fill:#2c5282,stroke:#90cdf4,color:#fff,stroke-width:2px
+    classDef orch fill:#744210,stroke:#ecc94b,color:#fff,stroke-width:2px
+    classDef sys fill:#276749,stroke:#48bb78,color:#fff,stroke-width:2px
     
-    class DT1 foundation
-    class C,P,W pure
-    class DS,PS effects
+    class M,I domain
+    class P logic
+    class W,R orch
+    class S,L sys
 ```
 
 **Layer Descriptions:**
 
-- **Business Logic (Pure Functions)**
-  - **Workflows**: Orchestrates checks and policies. Example: `completePurchase` coordinates validation, inventory checks, and payment
-  - **Checks**: Small, context-light predicates answering domain questions. Example: `isValidCart()`, `hasRole("admin")`
-  - **Policies**: Business decision rules composing checks with context. Example: `canPurchase()` checks inventory, user eligibility, and business hours
+- **Domain (Pure)**
+  - **Models**: Data schemas and co-located pure logic (e.g., `Cart.isEmpty`).
+  - **Interfaces**: Contracts for external capabilities (e.g., `PaymentRepo`).
 
-- **System (Side Effects)**
-  - **Domain Services**: Abstractions over external systems. Example: `PersistenceService.findNodeById()` abstracts database operations
-  - **Platform Services**: Actual external system calls. Example: `Neo4jService.query()` makes direct database calls
-  
-- **Foundation**
-  - **Domain Types**: Branded types and models avoiding primitive obsession. Example: `Email`, `Money`, `Cart`
+- **Logic (Pure)**
+  - **Policies**: Complex business rules and decision making (e.g., `determinePaymentStrategy`).
+
+- **Orchestration (Impure)**
+  - **Workflows**: The "script" of the application. Coordinates domain, policies, and services.
+  - **Registries**: Handles dynamic runtime selection of service implementations (Strategy Pattern).
+
+- **Infrastructure (Impure)**
+  - **Services**: Concrete implementations of Domain Interfaces (e.g., `StripeService`).
+  - **Lib**: Generic internal libraries and helpers (e.g., `Neo4jClient`).
 
 For a detailed source code directory layout, see [docs/project-structure/directory-layout.md](docs/project-structure/directory-layout.md).
 

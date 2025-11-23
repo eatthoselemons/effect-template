@@ -2,50 +2,45 @@
 
 ```
 src/
-├── domain/                   # DATA
-│   ├── types/                # Schemas, branded types, errors
-│   ├── ops/                  # Type Specific Functions (centsToDollars())
-│   └── models/               # Domain models (Money, Cart, etc.)
+├── domain/                   # PURE DOMAIN KNOWLEDGE
+│   ├── models/               # Data Types + Pure Logic
+│   │   ├── Money.ts          # Schema + pure functions (add, format)
+│   │   └── Cart.ts           # Schema + checks (isEmpty, total)
+│   │   
+│   └── interfaces/           # Service Contracts (Ports)
+│       ├── PaymentRepo.ts    # interface PaymentRepo { ... }
+│       └── ShippingSvc.ts    # interface ShippingSvc { ... }
 │
-├── checks/                    # CHECKS - Small, context-light predicates
-│   │                           # Answer domain questions with yes/no
-│   │                           # Operate on one concept or small cluster
-│   ├── cart/
-│   │   └── validation.ts     # isValidCart, hasValidItems
-│   └── user/
-│       └── permissions.ts    # hasRole, isActive
-│
-├── policies/                  # POLICIES - Business decision rules
-│   │                           # Compose checks, consider context (time, role, config, jurisdiction)
-│   │                           # Return reasoned decisions (not just true/false)
-│   ├── cart/
-│   │   └── purchase-rules.ts # canPurchase (composes checks + context)
-│   └── user/
-│       └── access.ts         # canAccessResource (role + time + jurisdiction)
-│
-├── workflows/                 # BUSINESS PROCESS ORCHESTRATION
+├── policies/                  # BUSINESS DECISIONS
+│   │                           # Pure functions, multi-entity context
+│   │                           # Returns Result or Strategy Decision
 │   ├── purchase/
-│   │   ├── complete-purchase.ts
-│   │   └── refund-purchase.ts
+│   │   └── routing.ts        # determinePaymentStrategy(amount)
+│   └── user/
+│       └── access.ts         # canAccessResource(user, resource)
+│
+├── workflows/                 # ORCHESTRATION
+│   │                           # Impure, connects pieces, transaction flow
+│   ├── purchase/
+│   │   └── checkout.ts       # Orchestrates Payment, Inventory, Email
 │   └── content/
-│       ├── create-content.ts
-│       └── update-content.ts
+│       └── publish.ts
 │
-├── services/
-│   ├── platform/              # Infrastructure/external services
-│   │   ├── Neo4j.service.ts
-│   │   └── FileSystem.layer.ts
-│   └── domain/                # Intermediate services, adapters
-│       ├── Persistance.service.ts
-│       ├── Inventory.service.ts
-│       └── Shipping.service.ts
+├── registries/                # DYNAMIC WIRING (Strategy Pattern)
+│   │                           # Runtime selection of implementations
+│   └── PaymentRegistry.ts    # Selects Stripe vs PayPal based on Policy
 │
-└── layers/                    # DEPENDENCY INJECTION
-    ├── platform/
-    │   ├── Neo4j.layer.ts
-    │   └── FileSystem.layer.ts
-    └── domain/
-        ├── Persistance.layer.ts
-        ├── Inventory.service.ts
-        └── Shipping.service.ts
+├── services/                  # INFRASTRUCTURE IMPLEMENTATIONS
+│   └── platform/              # Concrete Adapters
+│       ├── Stripe.service.ts # Implements PaymentInterface
+│       ├── Neo4j.service.ts  # Implements GraphInterface
+│       └── Disk.service.ts   # Implements FileInterface
+│
+├── lib/                       # GENERIC UTILITIES
+│   │                           # Internal libraries, no domain knowledge
+│   ├── neo4j-client/
+│   └── git-helper/
+│
+└── layers/                    # STATIC DEPENDENCY INJECTION
+    └── Main.layer.ts         # Prod/Test wiring configuration
 ```
