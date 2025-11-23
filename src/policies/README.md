@@ -10,6 +10,8 @@
 ## Example
 
 ```typescript
-export const determinePaymentStrategy = (amount: number) => 
+export type PaymentStrategy = 'RETAIL' | 'WHOLESALE'
+
+export const determinePaymentStrategy = (amount: number): PaymentStrategy => 
   amount < 1000 ? 'RETAIL' : 'WHOLESALE'
 ```
