@@ -3,6 +3,8 @@
 ## The Decision
 We define Services as **Interfaces** (Contracts) in the Domain layer, and **Implementations** (Adapters) in the Infrastructure layer. We use **Registries** only for dynamic runtime selection.
 
+**Vocabulary Note:** In Effect, a "Layer" is a *Constructor* for a Service, not the Service itself. `PostgresLive` is a Layer that constructs the `Postgres` Service.
+
 ## The Reasoning
 
 ### 1. The Interface is the Service

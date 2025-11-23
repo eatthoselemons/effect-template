@@ -1,7 +1,7 @@
 # Composition over Events
 
 ## The Decision
-We prioritize **Direct Function Composition** (via `Effect.gen`) for core business logic. We use **Events** only for side effects that do not impact the transaction's success.
+We prioritize **Direct Function Composition** (via `pipe`) for core business logic. We use **Events** only for side effects that do not impact the transaction's success.
 
 ## The Reasoning
 
@@ -12,7 +12,7 @@ Developers often break monoliths into event-driven fragments to "decouple" them.
 - **Refactoring Pain**: "Find Usages" breaks.
 
 ### 2. Local Reasoning
-With Effect, `yield* _(step1); yield* _(step2)` provides:
+With Effect, `step1.pipe(step2)` provides:
 - **Transactional Integrity**: If step2 fails, the whole block fails (or recovers).
 - **Type Safety**: The output of step1 is typed as the input of step2.
 - **Readability**: The linear flow is visible.
