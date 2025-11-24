@@ -8,6 +8,7 @@ This guide outlines the philosophy and process for designing software in this re
 We do not write code to *check* if data is valid. We design types so that *invalid data cannot exist*.
 
 ## The Process (TDFDDD)
+**Type-Driven Functional Domain-Driven Design**
 
 We strictly separate **Design** (High Inference/Intelligence) from **Implementation** (Mechanical Assembly). Do not write implementation code until the design is frozen.
 
