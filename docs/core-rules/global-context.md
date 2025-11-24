@@ -1,5 +1,8 @@
 # Global Context & Core Philosophy
 
+**Root Philosophy**: Functional Domain-Driven Design (Scott Wlaschin).
+*Make illegal states unrepresentable. Use types as documentation.*
+
 ## 1. The Golden Rule: Purity vs. IO
 - **Domain (Pure)**: `src/domain/models` and `src/policies` MUST be 100% pure. Deterministic, no side effects, no service dependency.
 - **Workflows (Impure)**: `src/workflows` orchestrate logic. They verify policies and call Services.
