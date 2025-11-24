@@ -25,20 +25,7 @@
 - `services/`: Interfaces (Ports) and Implementations (Adapters).
 
 ## 5. The Design Protocol (TDFDDD)
-*Do not implement logic until the types exist.*
-
-1.  **Event Storming (The Flow)**:
-    - Identify the **Input** (Command) and **Output** (Event/Result).
-    - *Example*: `PlaceOrder` -> `OrderPlaced` or `OrderRejected`.
-
-2.  **Type Modeling (The Nouns)**:
-    - Define the states required to bridge Input to Output.
-    - Group data by *usage*, not by database table. If a step needs `id` and `balance`, create a type for that specific context.
-
-3.  **Signature First (The Verbs)**:
-    - Write the function signatures using Effect types.
-    - `(input: Input) => Effect<Success, Error, Deps>`
-    - *This defines the contract before the complexity enters.*
-
-4.  **Implementation (The Assembly)**:
-    - Only now do you write the code to connect the pipes.
+1.  **Flow**: Define `Command` (Input) → `Event` (Output).
+2.  **Model**: Bridge Input to Output with specific types. No `status` fields.
+3.  **Contract**: Write `(Input) => Effect<Success, Error>` signatures first.
+4.  **Assembly**: Implement logic only after types verify.
