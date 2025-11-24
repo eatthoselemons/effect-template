@@ -1,3 +1,7 @@
+---
+globs:
+  - "src/workflows/**/*.ts"
+---
 # Workflows & Effects Rules
 
 1. **Use Effect.gen**: Prefer `Effect.gen` generators over chained combinators for readability.

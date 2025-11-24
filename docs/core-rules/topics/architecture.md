@@ -1,3 +1,7 @@
+---
+globs:
+  - "src/**/*.ts"
+---
 # Architecture & Purity Rules
 
 1. **Strict Separation of Concerns**:

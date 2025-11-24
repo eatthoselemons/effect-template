@@ -1,3 +1,7 @@
+---
+globs:
+  - "src/**/*.ts"
+---
 # Naming Conventions
 
 1. **Workflows**: Use `Verb-Noun` or `Scenario` names.

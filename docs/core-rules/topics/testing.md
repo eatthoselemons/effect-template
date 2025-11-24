@@ -1,3 +1,8 @@
+---
+globs:
+  - "**/*.test.ts"
+  - "**/test/**"
+---
 # Testing Strategy
 
 1. **Unit Tests for Pure Logic**:

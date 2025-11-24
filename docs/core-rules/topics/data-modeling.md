@@ -1,3 +1,8 @@
+---
+globs:
+  - "src/domain/models/**/*.ts"
+  - "src/domain/data/**/*.ts"
+---
 # Data Modeling & Schema Rules
 
 1. **Use Schema.Struct (Not Classes)**: Define data as plain objects with `Schema.Struct` for serializability. Logic goes in separate `Ops` modules.
