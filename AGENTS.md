@@ -18,7 +18,6 @@
 - Format: `pnpm prettier --write .`
 
 ## Development Workflow
-1. **Iterate on Types**: Develop the feature and iterate until it passes type checks using the toolbox (`tb__check-types`).
-   - **Tip**: Use the `tb__hover` tool to inspect variables and help fix type issues.
-2. **Iterate on Tests**: Once types are valid, iterate until tests pass using the toolbox (`tb__run-tests`).
+1. **Types**: Iterate with `tb__check-types` until valid. Use `tb__hover` to debug.
+2. **Tests**: Once types pass, iterate with `tb__run-tests` until passing.
 
