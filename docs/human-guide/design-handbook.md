@@ -39,7 +39,16 @@ Write the function signatures using Effect types before writing any logic. This 
 type PlaceOrder = (cmd: PlaceOrderCommand) => Effect<OrderPlaced, InvalidOrderError, Database | PaymentService>
 ```
 
-### Phase 4: Implementation (The Assembly)
+### Phase 4: Partitioning (The Strategy)
+**Goal:** Enforce Purity.
+
+Before implementing the workflow, decide *where* the logic lives:
+*   **Is it a Decision?** (e.g., "Can this user afford this?") -> **Policy** (Pure).
+*   **Is it an Action?** (e.g., "Save to DB") -> **Service** (IO).
+
+*Rule:* The Workflow should mostly coordinate these two, containing very little logic itself.
+
+### Phase 5: Implementation (The Assembly)
 **Goal:** Connect the pipes.
 
 Once types and signatures are defined, implementation is merely satisfying the compiler. This is where you use `Effect.gen`, pipe data through policies, and call services.
