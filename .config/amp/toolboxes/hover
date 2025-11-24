@@ -1,0 +1,111 @@
+#!/usr/bin/env node
+
+import ts from 'typescript';
+import fs from 'node:fs';
+import path from 'node:path';
+import process from 'node:process';
+
+const action = process.env.TOOLBOX_ACTION;
+
+if (action === 'describe') {
+  process.stdout.write(
+    [
+      'name: hover',
+      'description: Get type information at a specific position',
+      'dir: string The workspace directory',
+      'file: string The absolute path to the file',
+      'line: number The line number (1-based)',
+      'col: number The column number (1-based)',
+    ].join('\n')
+  );
+} else if (action === 'execute') {
+  try {
+    const input = fs.readFileSync(0, 'utf-8');
+    const params = parseInput(input);
+    
+    if (!params.dir || !params.file || !params.line || !params.col) {
+      console.error('Missing required parameters (dir, file, line, col)');
+      process.exit(1);
+    }
+
+    const configPath = ts.findConfigFile(params.dir, ts.sys.fileExists, 'tsconfig.json');
+    if (!configPath) {
+      console.error('Could not find tsconfig.json in ' + params.dir);
+      process.exit(1);
+    }
+
+    const configFile = ts.readConfigFile(configPath, ts.sys.readFile);
+    const parsedConfig = ts.parseJsonConfigFileContent(
+      configFile.config,
+      ts.sys,
+      path.dirname(configPath)
+    );
+
+    const servicesHost = {
+      getScriptFileNames: () => parsedConfig.fileNames,
+      getScriptVersion: () => '0',
+      getScriptSnapshot: (fileName) => {
+        if (!fs.existsSync(fileName)) {
+          return undefined;
+        }
+        return ts.ScriptSnapshot.fromString(fs.readFileSync(fileName).toString());
+      },
+      getCurrentDirectory: () => params.dir,
+      getCompilationSettings: () => parsedConfig.options,
+      getDefaultLibFileName: (options) => ts.getDefaultLibFilePath(options),
+      fileExists: ts.sys.fileExists,
+      readFile: ts.sys.readFile,
+      readDirectory: ts.sys.readDirectory,
+      directoryExists: ts.sys.directoryExists,
+      getDirectories: ts.sys.getDirectories,
+    };
+
+    const service = ts.createLanguageService(servicesHost, ts.createDocumentRegistry());
+
+    const filePath = params.file;
+    
+    let sourceFile = service.getProgram().getSourceFile(filePath);
+    
+    if (!sourceFile) {
+       console.error(`File not found in program: ${filePath}`);
+       process.exit(1);
+    }
+
+    const line = Number(params.line);
+    const col = Number(params.col);
+    
+    const position = sourceFile.getPositionOfLineAndCharacter(line - 1, col - 1);
+
+    const info = service.getQuickInfoAtPosition(filePath, position);
+
+    if (info) {
+      const display = ts.displayPartsToString(info.displayParts);
+      const doc = ts.displayPartsToString(info.documentation);
+      console.log('```typescript');
+      console.log(display);
+      console.log('```');
+      if (doc) {
+        console.log(doc);
+      }
+    } else {
+      console.log('No info available at this position');
+    }
+  } catch (e) {
+    console.error(e);
+    process.exit(1);
+  }
+}
+
+function parseInput(input) {
+  const params = {};
+  const lines = input.split('\n');
+  for (const line of lines) {
+    const idx = line.indexOf(': ');
+    if (idx !== -1) {
+      const key = line.substring(0, idx).trim();
+      const value = line.substring(idx + 2).trim();
+      params[key] = value;
+    }
+  }
+  return params;
+}
