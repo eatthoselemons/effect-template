@@ -24,26 +24,18 @@ globs:
    - **Services**: PascalCase when used as a Tag/dependency. `yield* DatabaseService`.
    - **Data**: camelCase. `const user = ...`
 
-## 2. Semantic Heuristics (The "Insightful" Rules)
+## 2. Semantic Heuristics (Domain Modeling)
 
-These rules apply to how you name **Types** and **Domain Concepts**.
+1. **State-First Types**: Avoid generic containers with status fields.
+   - ❌ `Item` (with `status: 'sold'`)
+   - ✅ `DraftItem` → `OpenItem` → `SoldItem`
 
-1. **The "Lifecycle" Rule (State over Generic Items)**:
-   - Never name a type `Item` if it represents a specific *stage*.
-   - ❌ `Item` (with a status field).
-   - ✅ `DraftItem` -> `OpenItem` -> `SoldItem`.
-   - *Reasoning*: `Item` is too generic; it implies a container. Specific types make state transitions explicit.
+2. **Capability-Based Naming**: Name by *role* or *purpose*, not data shape.
+   - ❌ `ItemWithBids` (Data description)
+   - ✅ `BiddableItem` (What can I do with it?)
+   - ✅ `BidHistory` (What is its role?)
 
-2. **The "Perspective" Rule (Utility over Holding)**:
-   - Name the type based on *what it is needed for*, not just what it holds.
-   - ❌ `TotalBids` (Data description).
-   - ✅ `BidHistory` or `BidCounter` (Domain concept).
-   - ✅ `BiddableItem` (Tells you exactly what you can do with it).
-
-3. **The "Suffix" Rule (Events vs. Objects)**:
-   - **Objects (State)**: Nouns.
-     - ✅ `ActiveItem`, `Truck`.
-   - **Events (History)**: Past Tense Verbs.
-     - ✅ `BidPlaced`, `ItemSold`.
-   - **Commands (Intent)**: Imperative Verbs.
-     - ✅ `PlaceBid`, `LoadTruck`.
+3. **The Domain Grammar**:
+   - **Objects** = Nouns (`ActiveItem`)
+   - **Events** = Past Verbs (`BidPlaced`)
+   - **Commands** = Imperative Verbs (`PlaceBid`)
