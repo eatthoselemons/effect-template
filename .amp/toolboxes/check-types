@@ -1,0 +1,36 @@
+#!/usr/bin/env node
+
+import { spawnSync } from 'node:child_process';
+import fs from 'node:fs';
+import process from 'node:process';
+
+
+const action = process.env.TOOLBOX_ACTION;
+
+if (action === 'describe') {
+  process.stdout.write(
+    [
+      'name: check-types',
+      'description: Run TypeScript compiler to check for type errors',
+      'dir: string The workspace directory',
+    ].join('\n')
+  );
+} else if (action === 'execute') {
+  const input = fs.readFileSync(0, 'utf-8');
+  let dir = '.';
+  
+  const lines = input.split('\n');
+  for (const line of lines) {
+    if (line.startsWith('dir: ')) {
+      dir = line.substring(5).trim();
+    }
+  }
+
+  const result = spawnSync('npx', ['tsc', '--noEmit'], {
+    cwd: dir,
+    stdio: 'inherit',
+    shell: true
+  });
+  
+  process.exit(result.status ?? 1);
+}
