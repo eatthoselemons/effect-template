@@ -9,6 +9,7 @@
 @docs/core-rules/topics/workflows.md
 @docs/core-rules/topics/testing.md
 @docs/core-rules/topics/naming.md
+@docs/core-rules/topics/design-process.md
 
 ## Common Commands
 - Build: `pnpm build`

@@ -18,6 +18,12 @@ This is **not** a traditional application template. Instead, it's a meta-templat
 4. **Use checklists** (in `docs/framework/effect/checklists/`) to have the LLM review its own code
 5. **Review the LLM's work** knowing common issues have already been addressed
 
+## The Design Process
+
+When starting a new feature, create a markdown file in the `design/` directory (e.g. `design/my-feature.md`).
+The LLM will automatically load the design process rules. You can instruct the LLM to:
+"Help me design [Feature Name] following the TDFDDD process in `docs/core-rules/topics/design-process.md`."
+
 ## Design Overview
 
 This template promotes **workflow-centric functional domain-driven design** - an architectural approach where workflows orchestrate pure business logic through composable layers, combining the pipeline patterns from functional programming with domain-driven design principles.
