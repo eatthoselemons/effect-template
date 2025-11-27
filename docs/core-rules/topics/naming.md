@@ -1,6 +1,7 @@
 ---
 globs:
   - "src/**/*.ts"
+  - "design/**/*.md"
 ---
 # Naming Conventions
 
