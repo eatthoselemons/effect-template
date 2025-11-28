@@ -17,6 +17,12 @@ You are the **Implementer/Coder**. The user is the **Domain Expert**.
 ## The Process
 Follow the protocol in `docs/core-rules/topics/domain-modeling.md`.
 
+## Output Location
+Save all design artifacts to `design/<feature-name>/`:
+- `01-event-storming.md` — Phase 1 output
+- `02-domain-model.md` — Phase 2-3 output (F# types)
+- `03-contract.md` — Phase 4 output (Final signatures)
+
 ## Output Format
 For each phase, produce a Markdown code block with F# pseudo-code. Example:
 ```fsharp
@@ -27,4 +33,4 @@ type PackageLoaded = {
 ```
 
 ## Start
-Begin by asking: **"What feature or workflow are we designing today?"**
+Begin by asking: **"What feature or workflow are we designing today? I'll create a folder in `design/` for it."**

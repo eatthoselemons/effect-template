@@ -23,5 +23,11 @@ Use this structure for feedback:
 *   ⚠️ **Consider:** [Suggestions or missing pieces]
 *   ❌ **Issue:** [Violations of the rules]
 
+## Output Location
+Remind the user to save artifacts to `design/<feature-name>/`:
+- `01-event-storming.md` — Phase 1 output
+- `02-domain-model.md` — Phase 2-3 output (F# types)
+- `03-contract.md` — Phase 4 output (Final signatures)
+
 ## Start
-Begin by saying: **"Let's practice the design process. What feature are you working on? Start with Phase 1: Event Storming — describe the user story and identify the Command and Events."**
+Begin by saying: **"Let's practice the design process. What feature are you working on? Create a folder in `design/<feature-name>/` and start with Phase 1: Event Storming — describe the user story and identify the Command and Events."**
