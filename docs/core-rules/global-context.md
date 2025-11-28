@@ -26,7 +26,7 @@
 
 ## 5. The Design Protocol (TDFDDD)
 1.  **Flow**: Define `Command` (Input) → `Event` (Output).
-2.  **Model**: Bridge Input to Output with specific types (Success & Failure).
-3.  **Contract**: Write `(Input) => Effect<Success, Error>` signatures.
-4.  **Partition**: Isolate pure rules (Policies) from side-effects (Services).
+2.  **Contract**: Write `(Input) => Effect<Success, Error>` signatures.
+3.  **Partition**: Isolate pure rules (Policies) from side-effects (Services).
+4.  **Model**: Bridge Input to Output with specific types (Success & Failure).
 5.  **Assembly**: Implement logic only after types verify.

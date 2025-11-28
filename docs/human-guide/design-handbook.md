@@ -21,25 +21,16 @@ We strictly separate **Design** (High Inference/Intelligence) from **Implementat
     *   *Convention:* Past-tense Verbs (`OrderPlaced`, `UserRegistered`).
 3.  **Identify Dependencies:** What data do we need to get from A to B?
 
-### Phase 2: Context Mapping (The Nouns)
-**Goal:** Define the data structures (Types).
-
-*   **The "Lifecycle" Rule:** Never use a `status` field to distinguish states. Create separate types.
-    *   *Bad:* `Order` with `status: 'Draft' | 'Paid'`.
-    *   *Good:* `DraftOrder` -> `PaidOrder`.
-*   **Context-Specific Types:** Do not reuse database entities if they don't match the context.
-    *   If a workflow only needs `UserId` and `Email`, define a `UserContactInfo` type. Do not pass the full `User` entity.
-
-### Phase 3: Signature Design (The Verbs)
+### Phase 2: Signature Design (The Verbs)
 **Goal:** Define the contract.
 
 Write the function signatures using Effect types before writing any logic. This is your blueprint.
 
 ```typescript
-type PlaceOrder = (cmd: PlaceOrderCommand) => Effect<OrderPlaced, InvalidOrderError, Database | PaymentService>
+type PlaceOrder = (cmd: PlaceOrderCommand) => Effect<OrderPlaced, InvalidOrderError, _>
 ```
 
-### Phase 4: Partitioning (The Strategy)
+### Phase 3: Partitioning (The Strategy)
 **Goal:** Enforce Purity.
 
 Before implementing the workflow, decide *where* the logic lives:
@@ -47,6 +38,15 @@ Before implementing the workflow, decide *where* the logic lives:
 *   **Is it an Action?** (e.g., "Save to DB") -> **Service** (IO).
 
 *Rule:* The Workflow should mostly coordinate these two, containing very little logic itself.
+
+### Phase 4: Context Mapping (The Nouns)
+**Goal:** Define the data structures (Types).
+
+*   **The "Lifecycle" Rule:** Never use a `status` field to distinguish states. Create separate types.
+    *   *Bad:* `Order` with `status: 'Draft' | 'Paid'`.
+    *   *Good:* `DraftOrder` -> `PaidOrder`.
+*   **Context-Specific Types:** Do not reuse database entities if they don't match the context.
+    *   If a workflow only needs `UserId` and `Email`, define a `UserContactInfo` type. Do not pass the full `User` entity.
 
 ### Phase 5: Implementation (The Assembly)
 **Goal:** Connect the pipes.
