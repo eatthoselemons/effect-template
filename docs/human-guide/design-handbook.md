@@ -169,10 +169,6 @@ type LoadFailure = {
 type LoadingFailureReason =
 | InsufficientVolume
 | OverMaxWeight
-
-type LoadingDecision = 
-| Loaded of PackageLoaded
-| Rejected of LoadFailure
 ```
 
 **2. The Workflow Return (The API Response)**
@@ -197,9 +193,8 @@ type LoadResponse = {
 *This is the function we will actually implement.*
 
 **The Policy (Pure Core):**
-*Note: The Policy returns a Decision, not a Result. It always successfully reaches a conclusion.*
 ```fsharp
-`decide : Package -> LoadingTruck -> LoadingDecision`
+`decide : Package -> LoadingTruck -> Result<PackageLoaded, LoadFailure>`
 ```
 
 **The Model (Pure Math):**
