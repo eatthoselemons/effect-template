@@ -78,7 +78,7 @@ Here is a template you can use. I have written it out for the **Truck Loading** 
 ```
 
 --- 
-## Phase 2: Domain Modeling (The Nouns)
+## Phase 3: Domain Modeling (The Nouns)
 *Format: F# Types*
 *Goal: Create the vocabulary. Avoid primitive obsession. Make illegal states unrepresentable.*
 
@@ -160,9 +160,19 @@ type PackageLoaded = {
   Timestamp: DateTime
 }
 
+type LoadFailure = {
+  reason: LoadingFailureReason
+  truckId: TruckId
+  package: Package
+}
+
+type LoadingFailureReason =
+| InsufficientVolume
+| OverMaxWeight
+
 type LoadingDecision = 
 | Loaded of PackageLoaded
-| Rejected of LoadFailureReason
+| Rejected of LoadFailure
 ```
 
 **2. The Workflow Return (The API Response)**
@@ -187,8 +197,9 @@ type LoadResponse = {
 *This is the function we will actually implement.*
 
 **The Policy (Pure Core):**
+*Note: The Policy returns a Decision, not a Result. It always successfully reaches a conclusion.*
 ```fsharp
-`decide : Package -> LoadingTruck -> Result<Decision, LoadFailureReason>`
+`decide : Package -> LoadingTruck -> LoadingDecision`
 ```
 
 **The Model (Pure Math):**
