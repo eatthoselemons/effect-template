@@ -1,5 +1,7 @@
 # 1. The Design Manifesto
 
+This is **Functional Domain Modeling** — the human-friendly name for **Type-Driven Functional Domain-Driven Design (TDFDDD)**.
+
 ## The Core Philosophy
 **"Make Illegal States Unrepresentable."**
 

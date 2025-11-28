@@ -1,5 +1,19 @@
 # Domain Modeling
 
+> **Also known as:** Type-Driven Functional Domain-Driven Design (TDFDDD).
+> In casual contexts, we call this **Functional Domain Modeling**.
+
+## Design Artifacts Location
+All design specs go in the `design/` directory:
+```
+design/
+├── <feature-name>/
+│   ├── 01-event-storming.md   # Phase 1: Commands, Events, Story
+│   ├── 02-domain-model.md     # Phase 2-3: Types in F# pseudo-code
+│   ├── 03-contract.md         # Phase 4: Final signatures
+│   └── notes.md               # Optional: Domain expert Q&A, decisions
+```
+
 ## Philosophy
 **"Make Illegal States Unrepresentable."**
 
