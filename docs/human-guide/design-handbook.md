@@ -147,34 +147,58 @@ type Truck =
 | Sealed of SealedTruck
 ```
 
-### D. Create Workflow Return Types
-*Goal: Define the input and output types for the process.*
-```fsharp
-type LoadFailureReason =
-| OverWeight of { Limit: Weight; Actual: Weight }
-| OverVolume of { Limit: Volume; Actual: Volume }
+### D. Create Workflow Return Types vs Policy Return Types
+*Goal: Distinguish between what the "Business" decides and what the "API" returns.*
 
+**1. The Policy Return (The Domain Event)**
+This is "What Happened". It contains the data required to update the state, but not the state itself.
+```fsharp
+// The "Event" (Internal Decision)
 type PackageLoaded = {
   TruckId: TruckId
-  PackageId: PackageId
-  NewLoadState: CurrentLoad
+  Package: Package    // The data needed to calculate new state
   Timestamp: DateTime
 }
 
-type LoadRefused = {
-Reason: LoadFailureReason
-TruckId: TruckId
+type LoadingDecision = 
+| Loaded of PackageLoaded
+| Rejected of LoadFailureReason
+```
+
+**2. The Workflow Return (The API Response)**
+This is what the caller (Frontend/API) gets back.
+```fsharp
+// The "Response" (External View)
+type LoadResponse = {
+  Success: boolean
+  Message: string
+  UpdatedCapacity: CurrentLoad
 }
 ```
 
-### E. Condense the signatures:
-*This is the function we will actually implement.*
+### E. The Operations (The Math)
+*Goal: Define the pure state transitions. This is the "Reducer" logic.*
 ```fsharp
-`decideLoad : packageWeight -> packageVolume -> truckRemainingVolume -> truckRemainingWeight -> Result<PackageLoaded, LoadFailed>`
+// Takes the current state + the data from the event -> New State
+`applyLoad : LoadingTruck -> Package -> LoadingTruck`
 ```
-condenses to
+
+### F. Condense the signatures:
+*This is the function we will actually implement.*
+
+**The Policy (Pure Core):**
 ```fsharp
-loadDesicion : Package -> LoadingTruck -> Result<PackageLoaded, LoadFailureReason>
+`decide : Package -> LoadingTruck -> Result<Decision, LoadFailureReason>`
+```
+
+**The Model (Pure Math):**
+```fsharp
+`apply : LoadingTruck -> Package -> LoadingTruck`
+```
+
+**The Workflow (Impure Shell):**
+```fsharp
+`loadPackage : TruckId -> PackageId -> Effect<LoadResponse>`
 ```
 ---
 
@@ -216,20 +240,44 @@ Here is the revised, lean process.
 
 **Step B: Write the Shell (The Pipeline)**
 *   This is where you write the `Effect.gen` code.
-*   *Pros of writing this directly:*
-    *   Effect's pipe syntax (`pipe(data, validate, transform)`) IS the documentation.
-    *   If you name your functions well (`fetchTruck`, `ensureTruckIsLoading`, `calculateLoad`), a domain expert *can* almost read the code.
+*   **The Workflow orchestrates the side effects using Pattern Matching.**
 
 ```typescript
 // The "Shell" Implementation
-const loadPackageWorkflow = (truckId, packageId) => Effect.gen(function*(_) {
+const loadPackageWorkflow = (truckId: TruckId, packageId: PackageId) => Effect.gen(function*(_) {
+  // 1. Gather Data (IO)
   const truck = yield* _(Repo.getTruck(truckId));
+  const pkg = yield* _(Repo.getPackage(packageId));
   
-  // The logic is visible right here in the flow
-  const validTruck = yield* _(ensureTruckIsLoading(truck));
+  // 2. Execute Policy (Decide)
+  const decision = LoadPolicy.decide(truck, pkg);
   
-  const result = yield* _(LoadPolicy.decide(validTruck, pkg));
-  
-  yield* _(Repo.save(result));
+  // 3. Match & Apply (Orchestration)
+  return yield* _(Match.value(decision).pipe(
+    
+    // CASE: SUCCESS
+    Match.when({ _tag: "PackageLoaded" }, (event) => Effect.gen(function*(_) {
+        // A. Apply the change (Pure Math)
+        // The Policy said "Yes", so we calculate the new state.
+        const newTruckState = Truck.applyLoad(truck, event.Package);
+        
+        // B. Persist the new state (IO)
+        yield* _(Repo.saveTruck(newTruckState));
+        
+        // C. Return the response
+        return { 
+            success: true, 
+            updatedCapacity: newTruckState.currentLoad 
+        };
+    })),
+
+    // CASE: FAILURE
+    Match.when({ _tag: "LoadFailed" }, (failure) => 
+        // We can choose to return a failure response OR fail the effect
+        Effect.fail(new BusinessError(failure.reason))
+    ),
+    
+    Match.exhaustive
+  ));
 });
 ```
