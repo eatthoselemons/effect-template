@@ -17,8 +17,9 @@ Here are the 3 Laws of Domain Naming:
 3. The "Suffix" Rule (Events vs. Objects):
 
 	- Objects (State): Nouns (`ActiveItem`, `Truck`).
-	- Events (History): Past Tense Verbs (`BidPlaced`, `ItemSold`).
-	- Commands (Intent): Imperative Verbs (`PlaceBid`, `LoadTruck`).
+	- Events (History): Noun + Past Tense Verb (`OrderPlaced`, `ItemSold`).
+		- *Why?* Sorting by the Noun keeps related events together (`OrderPlaced`, `OrderShipped`).
+	- Commands (Intent): Imperative Verb + Noun (`PlaceBid`, `LoadTruck`).
 
 ## Structural Naming Conventions
 
