@@ -20,6 +20,11 @@ Here are the 3 Laws of Domain Naming:
 	- Events (History): Noun + Past Tense Verb (`OrderPlaced`, `ItemSold`).
 		- *Why?* Sorting by the Noun keeps related events together (`OrderPlaced`, `OrderShipped`).
 	- Commands (Intent): Imperative Verb + Noun (`PlaceBid`, `LoadTruck`).
+      - Name the Intent *NOT* process
+
+4. Hints:
+
+    - Separate *process* from the *objects* don't mix the two (`UnprocessedVideo -> ProcessedVideo`, `PendingJob -> ActiveJob -> CompletedJob`)
 
 ## Structural Naming Conventions
 

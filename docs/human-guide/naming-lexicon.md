@@ -6,14 +6,14 @@
 ## 1. Lifecycle & State
 *Instead of `Start`, `Stop`, `Finish`, `Change`...*
 
-| Concept | Pro Terms | Examples |
-| :--- | :--- | :--- |
-| **Beginning** | `Initiate`, `Register`, `Onboard`, `Provision`, `Draft` | `InitiateTransfer`, `ProvisionServer` |
-| **Middle (Active)** | `Active`, `Pending`, `InFlight`, `Outstanding`, `Live` | `OutstandingInvoice`, `InFlightRequest` |
-| **Middle (Paused)** | `Suspended`, `Dormant`, `Held`, `Frozen` | `AccountFrozen`, `DormantUser` |
-| **Ending (Good)** | `Complete`, `Fulfill`, `Settle`, `Finalize`, `Resolve` | `SettlePayment`, `FulfillOrder` |
-| **Ending (Bad)** | `Expire`, `Revoke`, `Void`, `Reject`, `Decline`, `Abort` | `VoidTransaction`, `RevokeAccess` |
-| **Ending (Neutral)** | `Archive`, `Retire`, `Conclude`, `Terminate` | `RetireProduct`, `TerminateSession` |
+| Concept | Pro Terms                                                                          | Examples |
+| :--- |:-----------------------------------------------------------------------------------| :--- |
+| **Beginning** | `Initiate`, `Register`, `Onboard`, `Provision`, `Draft`                            | `InitiateTransfer`, `ProvisionServer` |
+| **Middle (Active)** | `Active`, `Pending`, `InFlight`, `Outstanding`, `Live`, `Provisional`, `Tentative` | `OutstandingInvoice`, `ProvisionalBooking` |
+| **Middle (Paused)** | `Suspended`, `Dormant`, `Held`, `Frozen`                                           | `AccountFrozen`, `DormantUser` |
+| **Ending (Good)** | `Complete`, `Fulfill`, `Settle`, `Finalize`, `Resolve`                             | `SettlePayment`, `FulfillOrder` |
+| **Ending (Bad)** | `Fail`, `Reject`, `Decline`, `Abort`, `Revoke`, `Void`, `Expire`                    | `VoidTransaction`, `JobFailed` |
+| **Ending (Neutral)** | `Archive`, `Retire`, `Conclude`, `Terminate`                                       | `RetireProduct`, `TerminateSession` |
 
 ## 2. Corrections & Changes
 *Instead of `Fix`, `Update`, `Bad`, `Wrong`...*
@@ -31,8 +31,9 @@
 | :--- | :--- | :--- |
 | **A specific subset** | `Cohort`, `Segment`, `Batch`, `Cluster` | `UserCohort`, `ProcessBatch` |
 | **A summary** | `Digest`, `Manifest`, `Summary`, `Snapshot` | `ShippingManifest`, `DailyDigest` |
-| **Searching** | `Locate`, `Query`, `Scan`, `Inspect` | `LocateParcel`, `InspectTraffic` |
+| **Searching** | `Locate`, `Query`, `Scan`, `Inspect`, `Retrieve`, `Fetch`, `Filter`, `Sift` | `LocateParcel`, `RetrieveRecords` |
 | **Putting** | `Allocate`, `Assign`, `Designate`, `Map` | `AllocateResources`, `DesignateOwner` |
+| **Communication** | `Notify`, `Alert`, `Dispatch`, `Broadcast`, `Deliver` | `DispatchEmail`, `BroadcastEvent` |
 
 ## 4. Verification & Security
 *Instead of `Check`, `IsGood`...*
@@ -42,6 +43,7 @@
 | **Checking** | `Validate`, `Verify`, `Authenticate`, `Authorize`, `Audit` | `AuthorizePayment`, `AuditLog` |
 | **Allowing** | `Grant`, `Permit`, `Enable`, `Whitelist` | `GrantPermission`, `WhitelistIP` |
 | **Blocking** | `Deny`, `Restrict`, `Revoke`, `Ban`, `Blacklist` | `DenyEntry`, `RevokeCertificate` |
+| **Subjects** | `Actor`, `Principal`, `Subject`, `Resource` | `RequestActor`, `TargetResource` |
 
 ## 5. Time & Scheduling
 *Instead of `Later`, `Wait`...*
