@@ -1,0 +1,32 @@
+{
+  "name": "tdfddd-suite",
+  "owner": {
+    "name": "Effect Template User",
+    "email": "user@example.com"
+  },
+  "metadata": {
+    "description": "Type-Driven Functional Domain-Driven Design (TDFDDD) Suite. Contains Discovery, Blueprint, and Assembly agents.",
+    "version": "1.0.0",
+    "created": "2026-02-17"
+  },
+  "plugins": [
+    {
+      "name": "discovery-agent",
+      "description": "Phase 1: Requirements Discovery & Consolidation. Interrogates user to uncover edge cases and generates requirements.md.",
+      "source": "./discovery-agent/",
+      "skills": ["./SKILL.md"]
+    },
+    {
+      "name": "blueprint-agent",
+      "description": "Phase 2: Domain Modeling & Contract. Generates F# domain models from requirements.md.",
+      "source": "./blueprint-agent/",
+      "skills": ["./SKILL.md"]
+    },
+    {
+      "name": "assembly-agent",
+      "description": "Phase 3: Implementation Assembly. Translates F# models into TypeScript/Effect code.",
+      "source": "./assembly-agent/",
+      "skills": ["./SKILL.md"]
+    }
+  ]
+}
