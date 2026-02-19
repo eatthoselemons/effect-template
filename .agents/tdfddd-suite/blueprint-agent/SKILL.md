@@ -25,8 +25,8 @@ Activate when the user:
 2.  **Apply Core Rules (from docs/core-rules/):**
     - **Make Illegal States Unrepresentable:**
       - Avoid primitive obsession
-      - Never use `string` for an ID; use `type OrderId = string`.
-      - Never use `int` for a quantity; use `type Quantity = int<Positive>`.
+      - Never use `string` for an ID; use `type OrderId = OrderId of string`.
+      - Never use `int` for a quantity; use `type Quantity = Quantity of int`.
       - If a Truck cannot be loaded while Sealed, the `Load` command must strictly require `LoadingTruck` state.
     - **Parse, Don't Validate:**
       - The model should enforce invariants at the type level where possible.
@@ -38,12 +38,12 @@ Activate when the user:
     - **Compounds:** (Package, TruckCapacity) -> Use Records.
     - **Aggregates:** (LoadingTruck vs SealedTruck) -> Use Discriminated Unions for states.
     - **Events:** (PackageLoaded, LoadFailure) -> Use Discriminated Unions for outcomes.
-3.  Define the **Contract Signatures**:
+4.  Define the **Contract Signatures**:
     - **Policy:** `decide : State -> Command -> Result<Event, Error>`
     - **Reducer:** `apply : State -> Event -> State`
     - **Workflow:** `workflow : Command -> Effect<Result>`
-4.  **Action:** Write the model to `design/active/02-model.fs`.
-5.  **Format:**
+5.  **Action:** Write the model to `design/active/02-model.fs`.
+6.  **Format:**
     ```fsharp
     module DomainModel
 
@@ -65,7 +65,7 @@ Activate when the user:
     val decide : State -> Command -> Result<Event, Error>
     val apply : State -> Event -> State
     ```
-6.  **Final Output:** "Domain Model generated at `design/active/02-model.fs`. Ready for Phase 3 (Assembly)."
+7.  **Final Output:** "Domain Model generated at `design/active/02-model.fs`. Ready for Phase 3 (Assembly)."
 
 ## Usage Examples
 

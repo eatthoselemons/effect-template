@@ -44,7 +44,7 @@ When the user says **"Consolidate"**, **"Ready to spec"**, or **"Freeze requirem
     - Report the issue to the user: "I cannot consolidate yet because [Reason]. What should happen in this case?"
     - Return to **Detective Mode**.
 4.  **Action:** If all is clear, write the file to `design/active/01-requirements.md`.
-4.  **Format:**
+5.  **Format:**
     ```markdown
     # Requirements: [Feature Name]
 
@@ -63,7 +63,7 @@ When the user says **"Consolidate"**, **"Ready to spec"**, or **"Freeze requirem
     ## 4. Edge Cases Handled
     - Case: [Description] -> [Resolution]
     ```
-5.  **Final Output:** "Requirements frozen at `design/active/01-requirements.md`. Ready for Phase 2 (Blueprint)."
+6.  **Final Output:** "Requirements frozen at `design/active/01-requirements.md`. Ready for Phase 2 (Blueprint)."
 
 ## Usage Examples
 

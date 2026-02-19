@@ -48,26 +48,27 @@ Activate when the user:
     - **`src/layers/`** (Dependency Injection):
       - `Main.layer.ts` for wiring production dependencies.
 3.  Translate **Primitives**:
-    - `type Weight = int<kg>` -> `type Weight = number & Brand<"Kg">`
-3.  Translate **Structures (Records)**:
+    - `type Weight = int<kg>` -> `const Weight = Schema.Number.pipe(Schema.brand("Kg"))`
+    - Always export the type: `export type Weight = typeof Weight.Type`
+4.  Translate **Structures (Records)**:
     - `type User = { Name: string }` -> `const User = Schema.Struct({ name: Schema.String })`
-4.  Translate **Unions (Aggregates/Events)**:
+5.  Translate **Unions (Aggregates/Events)**:
     - `type State = A | B` -> `Schema.Union(A, B)` (Discriminated Union)
-5.  Implement the **Contract**:
+6.  Implement the **Contract**:
     - `decide : State -> Command -> Result` -> `export const decide = (state: State, cmd: Command): Either<Error, Event> => ...`
     - `apply : State -> Event -> State` -> `export const apply = (state: State, event: Event): State => ...`
     - `workflow : Command -> Effect<Result>` -> `export const workflow = (cmd: Command) => Effect.gen(...)`
-6.  **Action:** Write the implementation files to `src/`.
+7.  **Action:** Write the implementation files to `src/`.
     - `src/domain/models/`: Types & Schemas
     - `src/policies/`: Pure Logic (`decide`)
     - `src/workflows/`: Effect Orchestration (`workflow`)
-7.  **Format:** Use strict TypeScript with Effect.
+8.  **Format:** Use strict TypeScript with Effect.
 
 ## Translation Table
 
 | F# Concept | TypeScript / Effect Implementation |
 | :--- | :--- |
-| `type T = int<brand>` | `type T = number & Brand<"Brand">` |
+| `type T = int<brand>` | `const T = Schema.Number.pipe(Schema.brand("Brand"))` |
 | `type R = { f: T }` | `const R = Schema.Struct({ f: T })` |
 | `type U = A | B` | `Schema.Union(A, B)` |
 | `Result<T, E>` | `Either<E, T>` |
